@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Forum&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="flex">
+      <div class="input">
+        <input type="file" id="file" />
+        <button class="btn" onclick="load(document.getElementById('file'))">
+          Открыть
+        </button>
+      </div>
+      <div class="search">
+        <div class="inputData">
+          <input id="firstObj" type="text" />
+          <input id="relation" type="text" />
+          <input id="secondObj" type="text" />
+        </div>
+        <button class="btn" onclick="search()">
+          Отправить запрос
+        </button>
+      </div>
+    </div>
+
+    <div class="outbox">
+      <div class="out">
+        <h2>Сущности</h2>
+        <div id="entities"></div>
+      </div>
+      <div class="out">
+        <h2>Отношения</h2>
+        <div id="relations"></div>
+      </div>
+      <div class="out">
+        <h2>База знаний</h2>
+        <div id="examples"></div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
