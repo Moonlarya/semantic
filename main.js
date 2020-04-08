@@ -1,4 +1,5 @@
 let relationsData = [];
+let examplesData = [];
 
 const showEntities = (entities) => {
   const entitiesField = document.getElementById("entities");
@@ -45,14 +46,40 @@ function readFile(object) {
 }
 
 const load = async (file) => {
-  const data = await readFile(file);
+  /*const data = await readFile(file);
   showEntities(data.entities);
   showRelations(data.relations);
   showExamples(data.examples);
 
   entitiesData = data.entities;
   relationsData = data.relations;
-  examplesData = data.examples;
+  examplesData = data.examples;*/
+
+  entitiesData = [
+    ["10", "человек"],
+    ["11", "рука"],
+    ["12", "голова"],
+    ["13", "нога"],
+    ["14", "ребенок"],
+  ];
+  relationsData = [
+    ["1", "имеет часть"],
+    ["2", "является"],
+    ["3", "no common"],
+  ];
+  examplesData = [
+    ["10", "1", "11"],
+    ["10", "1", "12"],
+    ["10", "1", "13"],
+    ["14", "2", "10"],
+    ["13", "2", "14"],
+  ];
+  showEntities(entitiesData);
+  showRelations(relationsData);
+  showExamples(examplesData);
+
+  add(examplesData);
+  return examplesData;
 };
 
 const stringToMap = (str) => {
@@ -79,7 +106,11 @@ const formatToArr = (arr) => {
   return arrItems;
 };
 
-const isPresent = (examplesData, firstObj, relationItem, secondObj) => {
+const isPresent = (examplesData) => {
+  const firstObj = document.getElementById("firstObj").value;
+  const relationItem = document.getElementById("relation").value;
+  const secondObj = document.getElementById("secondObj").value;
+
   const result = examplesData.find((example) => {
     return (
       example[0] == firstObj &&
@@ -87,30 +118,39 @@ const isPresent = (examplesData, firstObj, relationItem, secondObj) => {
       Number(example[2]) == Number(secondObj)
     );
   });
-  return result;
+  const temp = result ? true : false;
+  alert(temp);
+  return temp;
 };
 
-const search = () => {
-  const firstObj = document.getElementById("firstObj").value;
-  const relationItem = document.getElementById("relation").value;
-  const secondObj = document.getElementById("secondObj").value;
+const sendQuery = document.getElementById("sendQuery");
+sendQuery.onclick = () => {
+  return isPresent(examplesData);
+};
 
-  if (isPresent(examplesData, firstObj, relationItem, secondObj)) {
-    console.log(firstObj, relationItem, secondObj);
-  }
-
-  if (entitiesData.find((entity) => entity[0] == firstObj)) {
-    const potentialAnswer = examplesData
-      .filter((example) => {
-        return example[0] == secondObj && relationItem == 2;
-      })
-      .map((example) => {
-        return [firstObj, "1", example[2]];
-      });
-    if (!isPresent(examplesData, firstObj, relationItem, secondObj)) {
-      examplesData.push(...potentialAnswer);
-      examplesData.push([firstObj, relationItem, secondObj]);
+const createPartsOfChild = (potentialAnswer) => {
+  for (let i = 0; i < examplesData.length; i++) {
+    for (let j = 0; j < potentialAnswer.length; j++) {
+      if (
+        examplesData[i][0] == potentialAnswer[j][2] &&
+        examplesData[i][1] == "1"
+      ) {
+        examplesData.push([potentialAnswer[j][0], "1", examplesData[i][2]]);
+      } else if (
+        examplesData[i][0] == potentialAnswer[j][2] &&
+        examplesData[i][1] == "2"
+      ) {
+        examplesData.push([potentialAnswer[j][0], "2", examplesData[i][2]]);
+      }
     }
-    showExamples(examplesData);
   }
+};
+
+const add = (examplesData) => {
+  const potentialAnswer = examplesData.filter((example) => {
+    console.log(example[1]);
+    return example[1] == 2;
+  });
+  createPartsOfChild(potentialAnswer);
+  showExamples(examplesData);
 };
