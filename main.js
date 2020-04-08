@@ -47,9 +47,6 @@ function readFile(object) {
 
 const load = async (file) => {
   /*const data = await readFile(file);
-  showEntities(data.entities);
-  showRelations(data.relations);
-  showExamples(data.examples);
 
   entitiesData = data.entities;
   relationsData = data.relations;
@@ -68,11 +65,9 @@ const load = async (file) => {
     ["3", "no common"],
   ];
   examplesData = [
-    ["10", "1", "11"],
-    ["10", "1", "12"],
-    ["10", "1", "13"],
-    ["14", "2", "10"],
-    ["13", "2", "14"],
+    ["10", "2", "11"],
+    ["11", "2", "12"],
+    ["10", "1", "15"],
   ];
   showEntities(entitiesData);
   showRelations(relationsData);
@@ -111,16 +106,19 @@ const isPresent = (examplesData) => {
   const relationItem = document.getElementById("relation").value;
   const secondObj = document.getElementById("secondObj").value;
 
-  const result = examplesData.find((example) => {
+  const result = examplesData.filter((example) => {
     return (
-      example[0] == firstObj &&
-      example[1] == relationItem &&
-      Number(example[2]) == Number(secondObj)
+      (firstObj === "?" || example[0] == firstObj) &&
+      (relationItem === "?" || example[1] == relationItem) &&
+      (secondObj === "?" || Number(example[2]) == Number(secondObj))
     );
   });
-  const temp = result ? true : false;
-  alert(temp);
-  return temp;
+  let contentToDisplay = "";
+  result.forEach((el) => {
+    contentToDisplay += el.join(":") + "\n";
+  });
+  alert(contentToDisplay);
+  return result;
 };
 
 const sendQuery = document.getElementById("sendQuery");
@@ -132,12 +130,12 @@ const createPartsOfChild = (potentialAnswer) => {
   for (let i = 0; i < examplesData.length; i++) {
     for (let j = 0; j < potentialAnswer.length; j++) {
       if (
-        examplesData[i][0] == potentialAnswer[j][2] &&
+        Number(examplesData[i][0]) == Number(potentialAnswer[j][2]) &&
         examplesData[i][1] == "1"
       ) {
         examplesData.push([potentialAnswer[j][0], "1", examplesData[i][2]]);
       } else if (
-        examplesData[i][0] == potentialAnswer[j][2] &&
+        Number(examplesData[i][0]) == Number(potentialAnswer[j][2]) &&
         examplesData[i][1] == "2"
       ) {
         examplesData.push([potentialAnswer[j][0], "2", examplesData[i][2]]);
@@ -148,7 +146,6 @@ const createPartsOfChild = (potentialAnswer) => {
 
 const add = (examplesData) => {
   const potentialAnswer = examplesData.filter((example) => {
-    console.log(example[1]);
     return example[1] == 2;
   });
   createPartsOfChild(potentialAnswer);
