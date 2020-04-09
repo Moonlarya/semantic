@@ -46,13 +46,13 @@ function readFile(object) {
 }
 
 const load = async (file) => {
-  /*const data = await readFile(file);
+  const data = await readFile(file);
 
   entitiesData = data.entities;
   relationsData = data.relations;
-  examplesData = data.examples;*/
+  examplesData = data.examples;
 
-  entitiesData = [
+  /*entitiesData = [
     ["10", "человек"],
     ["11", "рука"],
     ["12", "голова"],
@@ -68,7 +68,7 @@ const load = async (file) => {
     ["10", "2", "11"],
     ["11", "2", "12"],
     ["10", "1", "15"],
-  ];
+  ];*/
   showEntities(entitiesData);
   showRelations(relationsData);
   showExamples(examplesData);
