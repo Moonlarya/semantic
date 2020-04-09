@@ -1,5 +1,6 @@
 let relationsData = [];
 let examplesData = [];
+let entitiesData = [];
 
 const showEntities = (entities) => {
   const entitiesField = document.getElementById("entities");
@@ -74,7 +75,7 @@ const load = async (file) => {
   showExamples(examplesData);
 
   add(examplesData);
-  return examplesData;
+  return examplesData, entitiesData, relationsData;
 };
 
 const stringToMap = (str) => {
@@ -114,10 +115,11 @@ const isPresent = (examplesData) => {
     );
   });
   let contentToDisplay = "";
+  retranslator(result);
   result.forEach((el) => {
-    contentToDisplay += el.join(":") + "\n";
+    contentToDisplay += el.join(":");
   });
-  alert(contentToDisplay);
+  alert(result.length > 3 ? contentToDisplay : Boolean(result.length));
   return result;
 };
 
@@ -142,6 +144,27 @@ const createPartsOfChild = (potentialAnswer) => {
       }
     }
   }
+};
+
+const retranslator = (result) => {
+  result.forEach((el) => {
+    entitiesData.forEach((entity) => {
+      if (Number(el[2]) == Number(entity[0])) {
+        el[2] = entity[1];
+      }
+      if (el[0] == entity[0]) {
+        el[0] = entity[1];
+      }
+    });
+  });
+  result.forEach((el) => {
+    relationsData.forEach((relation) => {
+      if (el[1] == relation[0]) {
+        el[1] = relation[1];
+      }
+    });
+  });
+  return result;
 };
 
 const add = (examplesData) => {
