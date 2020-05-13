@@ -33,4 +33,4 @@ arr[value:value:value]
 - **n ? ?** - input n value of object (1 column), ? (all types of relationships), ? (all objects from 1 column that have relationship with first one)
 - **? ? ?** - see all objects and relationships
 
-> Please input all fields values ♥
+> Please fill all fields values ♥
